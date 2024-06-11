@@ -22,18 +22,18 @@ if result.returncode == 0:
         print(parts)
         if len(parts) >= 3:
             # Ignore the first part (file size or other metadata)
-            date_time_str = ' '.join(parts[1:3])  # Join date and time parts
-            mod_time = datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S.%f')
-            file_data.append((mod_time, parts[3:]))
+            date_time_str = parts[1]  # Join date and time parts
+            mod_time = datetime.strptime(date_time_str, '%Y-%m-%d')
+            file_data.append((mod_time, parts[2:]))
 
     # Sort the file data by modification time
-    sorted_file_data = sorted(file_data, key=lambda x: x[0])
+    sorted_file_data = sorted(file_data, key=lambda x: x[0], reverse=True)
 
     # Write the sorted data to a text file
     with open("file_list.txt", "w", encoding="utf-8") as file:
         for mod_time, file_parts in sorted_file_data:
             file_name = ' '.join(file_parts)
-            file.write(f"{mod_time.strftime('%Y/%m/%d %H:%M:%S')} {file_name}\n")
+            file.write(f"{mod_time.strftime('%Y/%m/%d')} {file_name}\n")
 
 else:
     error_output = result.stderr
